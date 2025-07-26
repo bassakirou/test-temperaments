@@ -30,8 +30,26 @@ const CONFIG = {
   },
 };
 
+// Fonction pour charger la clé API depuis Vercel en production
+async function loadApiKeyFromVercel() {
+  try {
+    // Essayer de charger depuis une API route Vercel
+    const response = await fetch('/api/config');
+    if (response.ok) {
+      const data = await response.json();
+      if (data.apiKey && data.apiKey !== '') {
+        console.log("✅ Clé API chargée depuis l'API Vercel");
+        return data.apiKey;
+      }
+    }
+  } catch (error) {
+    console.log("❌ Impossible de charger depuis l'API Vercel:", error.message);
+  }
+  return null;
+}
+
 // Fonction pour initialiser la configuration selon l'environnement
-function initializeConfig() {
+async function initializeConfig() {
   try {
     // Détecter l'environnement
     const isDev =
@@ -49,41 +67,48 @@ function initializeConfig() {
     console.log("- Environnement:", isDev ? "Développement" : "Production");
     console.log("- Hostname:", window.location.hostname);
 
-    // Méthode 1: Essayer process.env (injecté par Vite)
-    try {
-      if (typeof process !== 'undefined' && 
-          process.env && 
-          process.env.VITE_GROQ_API_KEY && 
-          process.env.VITE_GROQ_API_KEY !== '""' &&
-          process.env.VITE_GROQ_API_KEY !== "undefined") {
-        apiKey = process.env.VITE_GROQ_API_KEY;
-        // Nettoyer les guillemets si présents
-        if (apiKey.startsWith('"') && apiKey.endsWith('"')) {
-          apiKey = apiKey.slice(1, -1);
-        }
-        console.log("✅ Clé trouvée via process.env.VITE_GROQ_API_KEY");
-      }
-    } catch (e) {
-      console.log("❌ process.env non accessible:", e.message);
-    }
-
-    // Méthode 2: Variables globales (fallback)
-    if (!apiKey) {
+    // Méthode 1: Essayer process.env (injecté par Vite) - pour le développement
+    if (isDev) {
       try {
-        // Vérifier window.__VITE_GROQ_API_KEY__
-        if (typeof window !== "undefined" && 
-            window.__VITE_GROQ_API_KEY__ && 
-            window.__VITE_GROQ_API_KEY__ !== '""' &&
-            window.__VITE_GROQ_API_KEY__ !== "undefined") {
-          apiKey = window.__VITE_GROQ_API_KEY__;
+        if (typeof process !== 'undefined' && 
+            process.env && 
+            process.env.VITE_GROQ_API_KEY && 
+            process.env.VITE_GROQ_API_KEY !== '""' &&
+            process.env.VITE_GROQ_API_KEY !== "undefined") {
+          apiKey = process.env.VITE_GROQ_API_KEY;
+          // Nettoyer les guillemets si présents
           if (apiKey.startsWith('"') && apiKey.endsWith('"')) {
             apiKey = apiKey.slice(1, -1);
           }
-          console.log("✅ Clé trouvée via window.__VITE_GROQ_API_KEY__");
+          console.log("✅ Clé trouvée via process.env.VITE_GROQ_API_KEY");
         }
       } catch (e) {
-        console.log("❌ window.__VITE_GROQ_API_KEY__ non accessible:", e.message);
+        console.log("❌ process.env non accessible:", e.message);
       }
+
+      // Méthode 2: Variables globales (fallback pour le développement)
+      if (!apiKey) {
+        try {
+          if (typeof window !== "undefined" && 
+              window.__VITE_GROQ_API_KEY__ && 
+              window.__VITE_GROQ_API_KEY__ !== '""' &&
+              window.__VITE_GROQ_API_KEY__ !== "undefined") {
+            apiKey = window.__VITE_GROQ_API_KEY__;
+            if (apiKey.startsWith('"') && apiKey.endsWith('"')) {
+              apiKey = apiKey.slice(1, -1);
+            }
+            console.log("✅ Clé trouvée via window.__VITE_GROQ_API_KEY__");
+          }
+        } catch (e) {
+          console.log("❌ window.__VITE_GROQ_API_KEY__ non accessible:", e.message);
+        }
+      }
+    }
+
+    // Méthode 3: Pour la production, essayer de charger depuis l'API Vercel
+    if (isProd && !apiKey) {
+      console.log("🔄 Tentative de chargement depuis l'API Vercel...");
+      apiKey = await loadApiKeyFromVercel();
     }
 
     CONFIG.GROQ_API_KEY = apiKey;
@@ -99,16 +124,22 @@ function initializeConfig() {
       console.warn("⚠️ AUCUNE CLÉ API TROUVÉE !");
       if (isProd) {
         console.warn("🔧 En production: Vérifiez que VITE_GROQ_API_KEY est configurée dans Vercel");
+        console.warn("💡 Alternative: Créez une API route /api/config pour servir la clé");
       } else {
         console.warn("🔧 En développement: Vérifiez votre fichier .env");
       }
+    }
+
+    // Déclencher la mise à jour du statut IA après le chargement
+    if (typeof updateAIStatus === 'function') {
+      updateAIStatus();
     }
   } catch (error) {
     console.error("❌ Erreur lors de l'initialisation de la configuration:", error);
   }
 }
 
-// Initialiser au chargement
+// Initialiser au chargement (maintenant asynchrone)
 initializeConfig();
 
 // Vérifier si la clé API est configurée
@@ -119,6 +150,11 @@ CONFIG.isConfigured = function () {
     CONFIG.GROQ_API_KEY.trim().length > 20;
 
   return isValid;
+};
+
+// Fonction pour recharger la configuration (utile pour les tests)
+CONFIG.reload = function() {
+  return initializeConfig();
 };
 
 // Fonction pour obtenir des informations de debug (sans exposer la clé)

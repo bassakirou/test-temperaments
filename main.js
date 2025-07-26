@@ -237,6 +237,29 @@ function checkAIStatus() {
     }
 }
 
+// Mettre à jour le statut de l'IA
+function updateAIStatus() {
+    const aiStatusElement = document.getElementById('ai-status');
+    const t = translations[currentLanguage];
+    
+    if (aiConfig && aiConfig.isConfigured()) {
+        aiStatusElement.innerHTML = t.aiEnabled;
+        aiStatusElement.style.color = '#4CAF50';
+    } else if (aiConfig && !aiConfig.isConfigured()) {
+        aiStatusElement.innerHTML = t.aiNotFound;
+        aiStatusElement.style.color = '#F44336';
+    } else if (aiConfig && !aiConfig.ANALYSIS_SETTINGS.enabled) {
+        aiStatusElement.innerHTML = t.aiDisabled;
+        aiStatusElement.style.color = '#FF9800';
+    } else {
+        aiStatusElement.innerHTML = t.aiNotFound;
+        aiStatusElement.style.color = '#F44336';
+    }
+}
+
+// Exposer updateAIStatus globalement pour config.js
+window.updateAIStatus = updateAIStatus;
+
 // Fonctions du quiz (à implémenter)
 function startQuiz() {
     if (questions.length === 0) {
