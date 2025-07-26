@@ -91,18 +91,18 @@ button.start-btn {
 }
 
 .scores-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin: 15px 0;
 }
 
-.score-item {
+.score-card {
   background: #f8f9fa;
-  padding: 10px;
-  border-radius: 8px;
-  text-align: center;
-  border-left: 4px solid #82b1ff;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: left;
 }
 
 .ai-analysis {
