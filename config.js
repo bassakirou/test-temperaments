@@ -35,7 +35,7 @@ function initializeConfig() {
   try {
     // Pour Vite, les variables d'environnement sont injectées au build
     // En développement, elles sont disponibles via import.meta.env
-    // Mais comme nous sommes dans un script classique, nous devons les récupérer autrement
+    // En production, elles sont injectées via define dans vite.config.js
 
     // Vérifier si nous sommes en développement (présence de Vite)
     const isDev =
@@ -46,61 +46,72 @@ function initializeConfig() {
     CONFIG.ENV.isDevelopment = isDev;
     CONFIG.ENV.isProduction = isProd;
 
-    // Charger la clé API depuis les variables d'environnement injectées par Vite
-    // En développement, Vite injecte les variables dans window.__VITE_ENV__
-    // ou nous pouvons les récupérer via une approche différente
-
     // Essayer de récupérer la clé API depuis différentes sources
     let apiKey = "";
 
+    // DÉBOGAGE : Afficher toutes les sources possibles
+    console.log("🔍 DÉBOGAGE - Sources de variables d'environnement:");
+    console.log("- window.__VITE_GROQ_API_KEY__:", typeof window.__VITE_GROQ_API_KEY__, window.__VITE_GROQ_API_KEY__);
+    console.log("- typeof VITE_GROQ_API_KEY:", typeof VITE_GROQ_API_KEY);
+    console.log("- process.env (si accessible):", typeof process !== 'undefined' ? typeof process.env : 'undefined');
+    
+    // Essayer process.env.VITE_GROQ_API_KEY (injecté par Vite define)
+    try {
+      if (typeof process !== 'undefined' && process.env && process.env.VITE_GROQ_API_KEY) {
+        apiKey = process.env.VITE_GROQ_API_KEY;
+        console.log("✅ Clé trouvée via process.env.VITE_GROQ_API_KEY");
+      }
+    } catch (e) {
+      console.log("❌ process.env non accessible:", e.message);
+    }
+
     // 1. Depuis les variables globales injectées par Vite
-    if (typeof window !== "undefined" && window.__VITE_GROQ_API_KEY__) {
+    if (!apiKey && typeof window !== "undefined" && window.__VITE_GROQ_API_KEY__) {
       apiKey = window.__VITE_GROQ_API_KEY__;
+      console.log("✅ Clé trouvée via window.__VITE_GROQ_API_KEY__");
     }
 
     // 2. Depuis une variable globale définie par Vite (fallback)
     if (!apiKey && typeof VITE_GROQ_API_KEY !== "undefined") {
       apiKey = VITE_GROQ_API_KEY;
+      console.log("✅ Clé trouvée via VITE_GROQ_API_KEY global");
     }
 
-    // 3. Pour le développement, utiliser la clé du .env (injectée par Vite)
-    if (!apiKey && isDev) {
-      // Vite injecte process.env.VITE_GROQ_API_KEY via la configuration
+    // 3. Essayer import.meta.env (pour Vite en développement)
+    if (!apiKey && typeof import !== 'undefined') {
       try {
-        apiKey = process.env.VITE_GROQ_API_KEY;
+        // Cette approche ne fonctionne que dans les modules ES6
+        // mais nous sommes dans un script classique
+        console.log("⚠️ import.meta.env non accessible dans un script classique");
       } catch (e) {
-        console.warn("Impossible d'accéder à process.env:", e);
-      }
-
-      // Si toujours pas de clé, utiliser une valeur par défaut pour le développement
-      if (!apiKey) {
-        console.warn(
-          "⚠️ Aucune clé API Groq configurée. L'analyse IA ne fonctionnera pas."
-        );
-        apiKey = ""; // Pas de clé par défaut pour la sécurité
+        console.log("❌ import.meta.env non accessible:", e.message);
       }
     }
 
     CONFIG.GROQ_API_KEY = apiKey;
 
-    // Log pour le développement (sans exposer la clé)
-    if (CONFIG.ENV.isDevelopment) {
-      console.log("🔧 Mode développement activé");
-      console.log(
-        "🔑 Clé API configurée:",
-        CONFIG.GROQ_API_KEY ? "✅ Oui" : "❌ Non"
-      );
-      console.log("🔍 Environnement détecté:", {
-        isDevelopment: isDev,
-        isProduction: isProd,
-        hostname: window.location.hostname,
-      });
+    // Log détaillé pour le débogage
+    console.log("🔧 Configuration IA - Débogage détaillé:");
+    console.log("- Environnement:", {
+      isDevelopment: isDev,
+      isProduction: isProd,
+      hostname: window.location.hostname,
+      origin: window.location.origin
+    });
+    console.log("- Clé API:", {
+      found: !!apiKey,
+      length: apiKey ? apiKey.length : 0,
+      prefix: apiKey ? apiKey.substring(0, 4) + "..." : "Non définie",
+      isValid: apiKey && apiKey.startsWith("") && apiKey.length > 20
+    });
+
+    if (!apiKey) {
+      console.warn("⚠️ AUCUNE CLÉ API TROUVÉE !");
+      console.warn("En production, vérifiez que VITE_GROQ_API_KEY est configurée dans Vercel");
+      console.warn("En développement, vérifiez votre fichier .env");
     }
   } catch (error) {
-    console.warn(
-      "⚠️ Erreur lors de l'initialisation de la configuration:",
-      error
-    );
+    console.error("❌ Erreur lors de l'initialisation de la configuration:", error);
   }
 }
 

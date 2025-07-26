@@ -5,8 +5,12 @@ import { resolve } from 'path'
 export default defineConfig({
   // Configuration pour les variables d'environnement
   define: {
-    // Injecter la variable d'environnement au build
+    // Injecter la variable d'environnement au build de plusieurs façons
     'process.env.VITE_GROQ_API_KEY': JSON.stringify(process.env.VITE_GROQ_API_KEY || ''),
+    // Créer aussi une variable globale directement accessible
+    'VITE_GROQ_API_KEY': JSON.stringify(process.env.VITE_GROQ_API_KEY || ''),
+    // Et une version window pour plus de compatibilité
+    'window.__VITE_GROQ_API_KEY__': JSON.stringify(process.env.VITE_GROQ_API_KEY || ''),
   },
   
   // Configuration du build
