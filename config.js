@@ -36,9 +36,11 @@ function initializeConfig() {
     // Pour Vite, les variables d'environnement sont injectées au build
     // En développement, elles sont disponibles via import.meta.env
     // Mais comme nous sommes dans un script classique, nous devons les récupérer autrement
-    
+
     // Vérifier si nous sommes en développement (présence de Vite)
-    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const isDev =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
     const isProd = !isDev;
 
     CONFIG.ENV.isDevelopment = isDev;
@@ -47,20 +49,20 @@ function initializeConfig() {
     // Charger la clé API depuis les variables d'environnement injectées par Vite
     // En développement, Vite injecte les variables dans window.__VITE_ENV__
     // ou nous pouvons les récupérer via une approche différente
-    
+
     // Essayer de récupérer la clé API depuis différentes sources
     let apiKey = "";
-    
+
     // 1. Depuis les variables globales injectées par Vite
-    if (typeof window !== 'undefined' && window.__VITE_GROQ_API_KEY__) {
+    if (typeof window !== "undefined" && window.__VITE_GROQ_API_KEY__) {
       apiKey = window.__VITE_GROQ_API_KEY__;
     }
-    
+
     // 2. Depuis une variable globale définie par Vite (fallback)
-    if (!apiKey && typeof VITE_GROQ_API_KEY !== 'undefined') {
+    if (!apiKey && typeof VITE_GROQ_API_KEY !== "undefined") {
       apiKey = VITE_GROQ_API_KEY;
     }
-    
+
     // 3. Pour le développement, utiliser la clé du .env (injectée par Vite)
     if (!apiKey && isDev) {
       // Vite injecte process.env.VITE_GROQ_API_KEY via la configuration
@@ -69,12 +71,14 @@ function initializeConfig() {
       } catch (e) {
         console.warn("Impossible d'accéder à process.env:", e);
       }
-      
+
       // Si toujours pas de clé, utiliser une valeur par défaut pour le développement
-       if (!apiKey) {
-         console.warn("⚠️ Aucune clé API Groq configurée. L'analyse IA ne fonctionnera pas.");
-         apiKey = ""; // Pas de clé par défaut pour la sécurité
-       }
+      if (!apiKey) {
+        console.warn(
+          "⚠️ Aucune clé API Groq configurée. L'analyse IA ne fonctionnera pas."
+        );
+        apiKey = ""; // Pas de clé par défaut pour la sécurité
+      }
     }
 
     CONFIG.GROQ_API_KEY = apiKey;
@@ -89,7 +93,7 @@ function initializeConfig() {
       console.log("🔍 Environnement détecté:", {
         isDevelopment: isDev,
         isProduction: isProd,
-        hostname: window.location.hostname
+        hostname: window.location.hostname,
       });
     }
   } catch (error) {
