@@ -4,8 +4,7 @@
 // Nom de la variable : VITE_GROQ_API_KEY
 // Valeur : votre clé API Groq (commence par )
 
-const CONFIG = {
-  // Clé API Groq (sécurisée via variables d'environnement)
+const CONFIG = {  // Clé API Groq (sécurisée via variables d'environnement)
   GROQ_API_KEY: '',
 
   // Modèle IA à utiliser
@@ -19,24 +18,25 @@ const CONFIG = {
   },
 };
 
-// Initialiser la clé API selon l'environnement
-(() => {
+// Fonction pour initialiser la clé API
+function initializeApiKey() {
   try {
-    // Pour Vite en production (Vercel)
-    if (typeof import !== 'undefined' && import.meta && import.meta.env) {
-      CONFIG.GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || '';
-    }
-    // Fallback pour Node.js
-    else if (typeof process !== 'undefined' && process.env) {
+    // Pour les environnements Node.js (développement)
+    if (typeof process !== 'undefined' && process.env) {
       CONFIG.GROQ_API_KEY = process.env.VITE_GROQ_API_KEY || '';
     }
+    // Pour Vite en production, la variable sera injectée au build
+    // et accessible via window.__VITE_ENV__ ou directement remplacée
   } catch (error) {
     console.warn('Erreur lors de l\'accès aux variables d\'environnement:', error);
   }
-})();
+}
+
+// Initialiser au chargement
+initializeApiKey();
 
 // Vérifier si la clé API est configurée
-CONFIG.isConfigured = () => {
+CONFIG.isConfigured = function() {
   return (
     CONFIG.GROQ_API_KEY &&
     CONFIG.GROQ_API_KEY.startsWith("") &&
@@ -44,7 +44,7 @@ CONFIG.isConfigured = () => {
   );
 };
 
-// Exporter la configuration
+// Exporter la configuration pour Node.js
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = CONFIG;
 }
