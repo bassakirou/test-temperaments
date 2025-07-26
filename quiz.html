@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Tempéraments - Test de Connaissances</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Menu de navigation -->
+    <div id="menu-placeholder"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1 id="main-title">Quiz des Tempéraments</h1>
+            <p id="subtitle">Testez vos connaissances avec des études de cas pratiques</p>
+
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <button id="lang-fr" class="lang-btn active" onclick="changeLanguage('fr')">🇫🇷 Français</button>
+                <button id="lang-en" class="lang-btn" onclick="changeLanguage('en')">🇬🇧 English</button>
+            </div>
+        </header>
+
+        <!-- Instructions -->
+        <section id="instructions" class="section">
+            <h2 id="instructions-title">Instructions</h2>
+            <div id="instructions-content">
+                <p>Lisez chaque situation et sélectionnez le ou les tempéraments qui correspondent le mieux à la
+                    personne décrite.</p>
+                <ul>
+                    <li><strong>1 point</strong> : Correspondance parfaite</li>
+                    <li><strong>0.5 point</strong> : Correspondance partielle</li>
+                    <li><strong>0 point</strong> : Aucune correspondance</li>
+                </ul>
+                <p>Vous devez sélectionner au moins un tempérament pour chaque question.</p>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz-section" class="section" style="display: none;">
+            <div class="quiz-header">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <span id="question-counter">Question 1 / 25</span>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h3 id="question-context" class="question-context"></h3>
+                <p id="question-situation" class="question-situation"></p>
+
+                <div class="temperaments-grid">
+                    <div class="temperament-option">
+                        <input type="checkbox" id="sanguine" name="temperament" value="sanguine">
+                        <label for="sanguine" class="temperament-label sanguine">
+                            <span class="temperament-name" id="sanguine-name">Sanguin</span>
+                            <!-- <span class="temperament-desc" id="sanguine-desc">Extraverti, optimiste, sociable</span> -->
+                        </label>
+                    </div>
+
+                    <div class="temperament-option">
+                        <input type="checkbox" id="choleric" name="temperament" value="choleric">
+                        <label for="choleric" class="temperament-label choleric">
+                            <span class="temperament-name" id="choleric-name">Colérique</span>
+                            <!-- <span class="temperament-desc" id="choleric-desc">Leader, déterminé, ambitieux</span> -->
+                        </label>
+                    </div>
+
+                    <div class="temperament-option">
+                        <input type="checkbox" id="melancholy" name="temperament" value="melancholy">
+                        <label for="melancholy" class="temperament-label melancholy">
+                            <span class="temperament-name" id="melancholy-name">Mélancolique</span>
+                            <!-- <span class="temperament-desc" id="melancholy-desc">Perfectionniste, analytique, sensible</span> -->
+                        </label>
+                    </div>
+
+                    <div class="temperament-option">
+                        <input type="checkbox" id="phlegmatic" name="temperament" value="phlegmatic">
+                        <label for="phlegmatic" class="temperament-label phlegmatic">
+                            <span class="temperament-name" id="phlegmatic-name">Flegmatique</span>
+                            <!-- <span class="temperament-desc" id="phlegmatic-desc">Calme, patient, diplomate</span> -->
+                        </label>
+                    </div>
+                </div>
+
+                <div class="quiz-actions">
+                    <button id="prev-btn" class="btn secondary" onclick="previousQuestion()" disabled>Précédent</button>
+                    <button id="next-btn" class="btn primary" onclick="nextQuestion()" disabled>Suivant</button>
+                    <button id="finish-btn" class="btn primary" onclick="finishQuiz()"
+                        style="display: none;">Terminer</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="section" style="display: none;">
+            <h2 id="results-title">Résultats du Quiz</h2>
+            <div class="results-container">
+                <div class="score-display">
+                    <div class="total-score">
+                        <span id="final-score">0</span>
+                        <span id="max-score">/ 25</span>
+                    </div>
+                    <div class="score-percentage" id="score-percentage">0%</div>
+                </div>
+
+                <div class="performance-analysis">
+                    <h3 id="performance-title">Analyse de Performance</h3>
+                    <div id="performance-content"></div>
+                </div>
+
+                <div class="detailed-results">
+                    <h3 id="detailed-title">Résultats Détaillés</h3>
+                    <div id="detailed-content"></div>
+                </div>
+
+                <div class="quiz-actions">
+                    <button id="restart-btn" class="btn primary" onclick="restartQuiz()">Recommencer</button>
+                    <button id="review-btn" class="btn secondary" onclick="reviewAnswers()">Revoir les Réponses</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Review Section -->
+        <section id="review-section" class="section" style="display: none;">
+            <h2 id="review-title">Révision des Réponses</h2>
+            <div id="review-content"></div>
+            <div class="quiz-actions">
+                <button id="back-results-btn" class="btn secondary" onclick="backToResults()">Retour aux
+                    Résultats</button>
+            </div>
+        </section>
+
+        <!-- Start Button -->
+        <div class="start-container">
+            <button id="start-btn" class="btn primary large" onclick="startQuiz()">Commencer le Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentLanguage = 'fr';
+        let quizData = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let totalScore = 0;
+
+        // Traductions
+        const translations = {
+            fr: {
+                mainTitle: "Quiz des Tempéraments",
+                subtitle: "Testez vos connaissances avec des études de cas pratiques",
+                instructionsTitle: "Instructions",
+                instructionsContent: `
+                    <p>Lisez chaque situation et sélectionnez le ou les tempéraments qui correspondent le mieux à la personne décrite.</p>
+                    <ul>
+                        <li><strong>1 point</strong> : Correspondance parfaite</li>
+                        <li><strong>0.5 point</strong> : Correspondance partielle</li>
+                        <li><strong>0 point</strong> : Aucune correspondance</li>
+                    </ul>
+                    <p>Vous devez sélectionner au moins un tempérament pour chaque question.</p>
+                `,
+                startBtn: "Commencer le Quiz",
+                sanguineName: "Sanguin",
+                sanguineDesc: "Extraverti, optimiste, sociable",
+                cholericName: "Colérique",
+                cholericDesc: "Leader, déterminé, ambitieux",
+                melancholyName: "Mélancolique",
+                melancholyDesc: "Perfectionniste, analytique, sensible",
+                phlegmaticName: "Flegmatique",
+                phlegmaticDesc: "Calme, patient, diplomate",
+                prevBtn: "Précédent",
+                nextBtn: "Suivant",
+                finishBtn: "Terminer",
+                resultsTitle: "Résultats du Quiz",
+                performanceTitle: "Analyse de Performance",
+                detailedTitle: "Résultats Détaillés",
+                restartBtn: "Recommencer",
+                reviewBtn: "Revoir les Réponses",
+                reviewTitle: "Révision des Réponses",
+                backResultsBtn: "Retour aux Résultats",
+                selectAtLeastOne: "Veuillez sélectionner au moins un tempérament.",
+                excellent: "Excellent ! Vous maîtrisez très bien les tempéraments.",
+                good: "Bon travail ! Vous avez une bonne compréhension des tempéraments.",
+                average: "Pas mal ! Il y a encore quelques points à améliorer.",
+                needsWork: "Vous devriez réviser les caractéristiques des tempéraments."
+            },
+            en: {
+                mainTitle: "Temperaments Quiz",
+                subtitle: "Test your knowledge with practical case studies",
+                instructionsTitle: "Instructions",
+                instructionsContent: `
+                    <p>Read each situation and select the temperament(s) that best match the person described.</p>
+                    <ul>
+                        <li><strong>1 point</strong>: Perfect match</li>
+                        <li><strong>0.5 point</strong>: Partial match</li>
+                        <li><strong>0 point</strong>: No match</li>
+                    </ul>
+                    <p>You must select at least one temperament for each question.</p>
+                `,
+                startBtn: "Start Quiz",
+                sanguineName: "Sanguine",
+                sanguineDesc: "Extroverted, optimistic, sociable",
+                cholericName: "Choleric",
+                cholericDesc: "Leader, determined, ambitious",
+                melancholyName: "Melancholic",
+                melancholyDesc: "Perfectionist, analytical, sensitive",
+                phlegmaticName: "Phlegmatic",
+                phlegmaticDesc: "Calm, patient, diplomatic",
+                prevBtn: "Previous",
+                nextBtn: "Next",
+                finishBtn: "Finish",
+                resultsTitle: "Quiz Results",
+                performanceTitle: "Performance Analysis",
+                detailedTitle: "Detailed Results",
+                restartBtn: "Restart",
+                reviewBtn: "Review Answers",
+                reviewTitle: "Answer Review",
+                backResultsBtn: "Back to Results",
+                selectAtLeastOne: "Please select at least one temperament.",
+                excellent: "Excellent! You have mastered temperaments very well.",
+                good: "Good work! You have a good understanding of temperaments.",
+                average: "Not bad! There are still some points to improve.",
+                needsWork: "You should review the characteristics of temperaments."
+            }
+        };
+
+        // Chargement des données du quiz
+        async function loadQuizData() {
+            try {
+                const response = await fetch('quiz.json');
+                quizData = await response.json();
+            } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
+            }
+        }
+
+        // Changement de langue
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            updateTranslations();
+
+            // Mettre à jour la langue du menu
+            updateMenuLanguageFromPage();
+        }
+
+        // Mise à jour des traductions
+        function updateTranslations() {
+            const t = translations[currentLanguage];
+            
+            // Fonction helper pour mettre à jour un élément s'il existe
+            function updateElement(id, property, value) {
+                const element = document.getElementById(id);
+                if (element) {
+                    if (property === 'innerHTML') {
+                        element.innerHTML = value;
+                    } else {
+                        element.textContent = value;
+                    }
+                }
+            }
+
+            updateElement('main-title', 'textContent', t.mainTitle);
+            updateElement('subtitle', 'textContent', t.subtitle);
+            updateElement('instructions-title', 'textContent', t.instructionsTitle);
+            updateElement('instructions-content', 'innerHTML', t.instructionsContent);
+            updateElement('start-btn', 'textContent', t.startBtn);
+
+            updateElement('sanguine-name', 'textContent', t.sanguineName);
+            updateElement('sanguine-desc', 'textContent', t.sanguineDesc);
+            updateElement('choleric-name', 'textContent', t.cholericName);
+            updateElement('choleric-desc', 'textContent', t.cholericDesc);
+            updateElement('melancholy-name', 'textContent', t.melancholyName);
+            updateElement('melancholy-desc', 'textContent', t.melancholyDesc);
+            updateElement('phlegmatic-name', 'textContent', t.phlegmaticName);
+            updateElement('phlegmatic-desc', 'textContent', t.phlegmaticDesc);
+
+            updateElement('prev-btn', 'textContent', t.prevBtn);
+            updateElement('next-btn', 'textContent', t.nextBtn);
+            updateElement('finish-btn', 'textContent', t.finishBtn);
+            updateElement('results-title', 'textContent', t.resultsTitle);
+            updateElement('performance-title', 'textContent', t.performanceTitle);
+            updateElement('detailed-title', 'textContent', t.detailedTitle);
+            updateElement('restart-btn', 'textContent', t.restartBtn);
+            updateElement('review-btn', 'textContent', t.reviewBtn);
+            updateElement('review-title', 'textContent', t.reviewTitle);
+            updateElement('back-results-btn', 'textContent', t.backResultsBtn);
+        }
+
+        // Démarrage du quiz
+        function startQuiz() {
+            // Masquer le sélecteur de langue une fois le test commencé
+            document.querySelector('.language-selector').style.display = 'none';
+            
+            document.getElementById('instructions').style.display = 'none';
+            document.querySelector('.start-container').style.display = 'none';
+            document.getElementById('quiz-section').style.display = 'block';
+
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            totalScore = 0;
+
+            showQuestion();
+        }
+
+        // Affichage d'une question
+        function showQuestion() {
+            const question = quizData[currentQuestionIndex];
+
+            document.getElementById('question-counter').textContent =
+                `Question ${currentQuestionIndex + 1} / ${quizData.length}`;
+
+            document.getElementById('question-context').textContent = question.context;
+            document.getElementById('question-situation').textContent =
+                question.situation[currentLanguage];
+
+            // Mise à jour de la barre de progression
+            const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+
+            // Réinitialisation des checkboxes
+            document.querySelectorAll('input[name="temperament"]').forEach(input => {
+                input.checked = false;
+            });
+
+            // Mise à jour des boutons
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-btn').style.display =
+                currentQuestionIndex === quizData.length - 1 ? 'none' : 'inline-block';
+            document.getElementById('finish-btn').style.display =
+                currentQuestionIndex === quizData.length - 1 ? 'inline-block' : 'none';
+
+            updateNextButton();
+        }
+
+        // Mise à jour du bouton suivant
+        function updateNextButton() {
+            const checkboxes = document.querySelectorAll('input[name="temperament"]');
+            const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
+
+            document.getElementById('next-btn').disabled = !isAnyChecked;
+            document.getElementById('finish-btn').disabled = !isAnyChecked;
+        }
+
+        // Gestion des checkboxes
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('input[name="temperament"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updateNextButton);
+            });
+        });
+
+        // Question précédente
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                saveCurrentAnswer();
+                currentQuestionIndex--;
+                showQuestion();
+                loadSavedAnswer();
+            }
+        }
+
+        // Question suivante
+        function nextQuestion() {
+            const checkboxes = document.querySelectorAll('input[name="temperament"]');
+            const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
+
+            if (!isAnyChecked) {
+                alert(translations[currentLanguage].selectAtLeastOne);
+                return;
+            }
+
+            saveCurrentAnswer();
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        // Sauvegarde de la réponse actuelle
+        function saveCurrentAnswer() {
+            const selectedTemperaments = [];
+            document.querySelectorAll('input[name="temperament"]:checked').forEach(input => {
+                selectedTemperaments.push(input.value);
+            });
+            userAnswers[currentQuestionIndex] = selectedTemperaments;
+        }
+
+        // Chargement de la réponse sauvegardée
+        function loadSavedAnswer() {
+            if (userAnswers[currentQuestionIndex]) {
+                userAnswers[currentQuestionIndex].forEach(temperament => {
+                    document.getElementById(temperament).checked = true;
+                });
+                updateNextButton();
+            }
+        }
+
+        // Fin du quiz
+        function finishQuiz() {
+            const checkboxes = document.querySelectorAll('input[name="temperament"]');
+            const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked);
+
+            if (!isAnyChecked) {
+                alert(translations[currentLanguage].selectAtLeastOne);
+                return;
+            }
+
+            saveCurrentAnswer();
+            calculateScore();
+            showResults();
+        }
+
+        // Calcul du score
+        function calculateScore() {
+            totalScore = 0;
+
+            for (let i = 0; i < quizData.length; i++) {
+                const question = quizData[i];
+                const userAnswer = userAnswers[i] || [];
+
+                userAnswer.forEach(temperament => {
+                    totalScore += question.answers[temperament] || 0;
+                });
+            }
+        }
+
+        // Affichage des résultats
+        function showResults() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+
+            const maxPossibleScore = quizData.length; // 1 point max par question
+            const percentage = Math.round((totalScore / maxPossibleScore) * 100);
+
+            document.getElementById('final-score').textContent = totalScore.toFixed(2);
+            document.getElementById('max-score').textContent = `/ ${maxPossibleScore}`;
+            document.getElementById('score-percentage').textContent = percentage + '%';
+
+            // Analyse de performance
+            let performanceText = '';
+            const t = translations[currentLanguage];
+
+            if (percentage >= 80) {
+                performanceText = t.excellent;
+            } else if (percentage >= 60) {
+                performanceText = t.good;
+            } else if (percentage >= 40) {
+                performanceText = t.average;
+            } else {
+                performanceText = t.needsWork;
+            }
+
+            document.getElementById('performance-content').innerHTML = `
+                <p>${performanceText}</p>
+                <p>Score: ${totalScore.toFixed(2)}/${maxPossibleScore} (${percentage}%)</p>
+            `;
+
+            // Résultats détaillés
+            showDetailedResults();
+        }
+
+        // Affichage des résultats détaillés
+        function showDetailedResults() {
+            let detailedHTML = '<div class="detailed-grid">';
+
+            for (let i = 0; i < quizData.length; i++) {
+                const question = quizData[i];
+                const userAnswer = userAnswers[i] || [];
+                let questionScore = 0;
+
+                userAnswer.forEach(temperament => {
+                    questionScore += question.answers[temperament] || 0;
+                });
+
+                detailedHTML += `
+                    <div class="question-result">
+                        <div class="question-number">Q${i + 1}</div>
+                        <div class="question-score">${questionScore.toFixed(2)} pts</div>
+                        <div class="question-context-small">${question.context}</div>
+                    </div>
+                `;
+            }
+
+            detailedHTML += '</div>';
+            document.getElementById('detailed-content').innerHTML = detailedHTML;
+        }
+
+        // Redémarrage du quiz
+        function restartQuiz() {
+            // Réafficher le sélecteur de langue
+            document.querySelector('.language-selector').style.display = 'block';
+            
+            document.getElementById('results-section').style.display = 'none';
+            document.getElementById('review-section').style.display = 'none';
+            document.getElementById('instructions').style.display = 'block';
+            document.querySelector('.start-container').style.display = 'block';
+
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            totalScore = 0;
+        }
+
+        // Révision des réponses
+        function reviewAnswers() {
+            document.getElementById('results-section').style.display = 'none';
+            document.getElementById('review-section').style.display = 'block';
+
+            let reviewHTML = '';
+
+            for (let i = 0; i < quizData.length; i++) {
+                const question = quizData[i];
+                const userAnswer = userAnswers[i] || [];
+
+                reviewHTML += `
+                    <div class="review-question">
+                        <h4>Question ${i + 1} - ${question.context}</h4>
+                        <p class="review-situation">${question.situation[currentLanguage]}</p>
+                        
+                        <div class="review-answers">
+                            <h5>Vos réponses:</h5>
+                            <div class="temperament-review">
+                `;
+
+                ['sanguine', 'choleric', 'melancholy', 'phlegmatic'].forEach(temp => {
+                    const isSelected = userAnswer.includes(temp);
+                    const score = question.answers[temp];
+                    const tempName = translations[currentLanguage][temp + 'Name'];
+
+                    reviewHTML += `
+                        <div class="temp-review ${isSelected ? 'selected' : ''} score-${score}">
+                            <span class="temp-name">${tempName}</span>
+                            <span class="temp-score">${score} pt${isSelected ? ' ✓' : ''}</span>
+                        </div>
+                    `;
+                });
+
+                reviewHTML += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('review-content').innerHTML = reviewHTML;
+        }
+
+        // Retour aux résultats
+        function backToResults() {
+            document.getElementById('review-section').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+        }
+
+        // Fonction pour mettre à jour la langue du menu
+        function updateMenuLanguageFromPage() {
+            // Appeler la fonction du menu si elle existe
+            if (typeof window.updateMenuLanguage === 'function') {
+                window.updateMenuLanguage(currentLanguage);
+            }
+        }
+
+        // Charger le menu de navigation
+        async function loadMenu() {
+            try {
+                const response = await fetch('menu.html');
+                const menuHTML = await response.text();
+                document.getElementById('menu-placeholder').innerHTML = menuHTML;
+
+                // Initialiser le menu après chargement (classe active + langue)
+                setTimeout(() => {
+                    if (typeof window.initMenuAfterLoad === 'function') {
+                        window.initMenuAfterLoad();
+                    }
+                    updateMenuLanguageFromPage();
+                }, 200);
+            } catch (error) {
+                console.error('Erreur lors du chargement du menu:', error);
+            }
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function () {
+            loadQuizData();
+            updateTranslations();
+            loadMenu(); // Charger le menu
+        });
+    </script>
+</body>
+
+</html>

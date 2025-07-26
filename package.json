@@ -1,0 +1,27 @@
+{
+  "name": "test-temperaments",
+  "version": "1.0.0",
+  "description": "Test de personnalité des 4 tempéraments avec analyse IA",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Application statique - pas de build nécessaire'",
+    "start": "python -m http.server 8000"
+  },
+  "keywords": [
+    "personnalité",
+    "tempéraments",
+    "psychologie",
+    "test",
+    "IA"
+  ],
+  "author": "Votre nom",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/votre-username/test-temperaments.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

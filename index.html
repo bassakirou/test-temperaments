@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test de Personnalité - Les 4 Tempéraments</title>
+    <script src="config.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Inclusion du menu de navigation -->
+    <div id="menu-placeholder"></div>
+    
+    <audio autoplay loop>
+        <source src="background-music.mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas la lecture audio.
+    </audio>
+
+    <header>
+        <h1 id="main-title">Test de Personnalité : Les 4 Tempéraments</h1>
+        
+        <!-- Sélecteur de langue -->
+        <div class="language-selector">
+            <button class="lang-btn active" onclick="setLanguage('fr')" id="lang-fr">
+                🇫🇷 FR
+            </button>
+            <button class="lang-btn" onclick="setLanguage('en')" id="lang-en">
+                🇬🇧 EN
+            </button>
+        </div>
+    </header>
+
+    <section class="intro">
+        <p id="welcome-text">Bienvenue ! Ce test ludique te permettra de découvrir ton tempérament dominant parmi les 4 types : Sanguin,
+            Colérique, Mélancolique, Flegmatique.</p>
+        <p id="instruction-text">Pour chaque question, réponds de 1 (Pas du tout) à 5 (Tout à fait).</p>
+        <p id="ai-status" style="font-size: 0.9rem; color: #666; margin: 10px 0;"></p>
+        <button class="start-btn" onclick="startQuiz()" id="start-btn">Commencer le test</button>
+    </section>
+
+    <section class="quiz hidden">
+        <div class="question-card">
+            <img class="illustration" src="" alt="Illustration question" id="question-image" />
+            <h2 id="question-text">Question</h2>
+            <p id="question-description" style="font-style: italic; color: #666; margin: 10px 0; font-size: 0.9rem; display: none;"></p>
+            <div class="scale-buttons" id="scale-buttons"></div>
+        </div>
+        <div style="margin-top:10px;">
+            <span id="progress"></span>
+        </div>
+    </section>
+
+    <section class="result hidden">
+        <div class="result-container">
+            <h2 id="temperament-title" class="temperament-title">Résultat</h2>
+            <div id="scores-grid" class="scores-grid"></div>
+            
+            <div id="ai-analysis" class="ai-analysis" style="display: none;">
+                <h3>
+                    🧠 <span id="ai-analysis-title">Analyse Personnalisée par IA</span>
+                    <span id="analysis-loader" class="loader" style="display: none;"></span>
+                </h3>
+                <div id="ai-analysis-content" class="ai-analysis-content"></div>
+            </div>
+            
+            <button class="start-btn" onclick="restartTest()" id="restart-btn">Refaire le test</button>
+        </div>
+    </section>
+
+    <script>
+        let questions = [];
+        let current = 0;
+        let scores = {
+            sanguine: 0,
+            choleric: 0,
+            melancholy: 0,
+            phlegmatic: 0
+        };
+        let userResponses = []; // Stocker les réponses pour l'analyse IA
+        let currentLanguage = 'fr'; // Langue par défaut
+
+        // Système de traductions
+        const translations = {
+            fr: {
+                mainTitle: "Test de Personnalité : Les 4 Tempéraments",
+                welcomeText: "Bienvenue ! Ce test ludique te permettra de découvrir ton tempérament dominant parmi les 4 types : Sanguin, Colérique, Mélancolique, Flegmatique.",
+                instructionText: "Pour chaque question, réponds de 1 (Pas du tout) à 5 (Tout à fait).",
+                startBtn: "Commencer le test",
+                restartBtn: "Refaire le test",
+                aiAnalysisTitle: "Analyse Personnalisée par IA",
+                generatingAnalysis: "Génération de votre analyse personnalisée...",
+                aiEnabled: "🤖 <strong>Analyse IA activée</strong> - Vous recevrez une analyse personnalisée détaillée !",
+                aiDisabled: "📊 Analyse IA désactivée - Vous recevrez les résultats de base.",
+                aiNotFound: "⚠️ Configuration IA non trouvée - Veuillez configurer config.js pour l'analyse IA.",
+                dominantTemperament: "Votre tempérament dominant :",
+                question: "Question",
+                of: "sur",
+                temperaments: {
+                    sanguine: "Sanguin",
+                    choleric: "Colérique", 
+                    melancholy: "Mélancolique",
+                    phlegmatic: "Flegmatique"
+                }
+            },
+            en: {
+                mainTitle: "Personality Test: The 4 Temperaments",
+                welcomeText: "Welcome! This fun test will help you discover your dominant temperament among the 4 types: Sanguine, Choleric, Melancholic, Phlegmatic.",
+                instructionText: "For each question, answer from 1 (Not at all) to 5 (Completely).",
+                startBtn: "Start the test",
+                restartBtn: "Retake the test",
+                aiAnalysisTitle: "AI Personalized Analysis",
+                generatingAnalysis: "Generating your personalized analysis...",
+                aiEnabled: "🤖 <strong>AI Analysis enabled</strong> - You will receive a detailed personalized analysis!",
+                aiDisabled: "📊 AI Analysis disabled - You will receive basic results.",
+                aiNotFound: "⚠️ AI Configuration not found - Please configure config.js for AI analysis.",
+                dominantTemperament: "Your dominant temperament:",
+                question: "Question",
+                of: "of",
+                temperaments: {
+                    sanguine: "Sanguine",
+                    choleric: "Choleric",
+                    melancholy: "Melancholic", 
+                    phlegmatic: "Phlegmatic"
+                }
+            }
+        };
+
+        // Descriptions des tempéraments (multilingue)
+        const temperamentDescriptions = {
+            fr: {
+                sanguine: {
+                    name: "Sanguin",
+                    emoji: "😄",
+                    color: "#ff6b6b",
+                    traits: ["Extraverti", "Optimiste", "Sociable", "Spontané"]
+                },
+                choleric: {
+                    name: "Colérique", 
+                    emoji: "💪",
+                    color: "#4ecdc4",
+                    traits: ["Leader", "Déterminé", "Ambitieux", "Direct"]
+                },
+                melancholy: {
+                    name: "Mélancolique",
+                    emoji: "🤔", 
+                    color: "#45b7d1",
+                    traits: ["Analytique", "Perfectionniste", "Réfléchi", "Créatif"]
+                },
+                phlegmatic: {
+                    name: "Flegmatique",
+                    emoji: "😌",
+                    color: "#96ceb4", 
+                    traits: ["Calme", "Loyal", "Patient", "Diplomate"]
+                }
+            },
+            en: {
+                sanguine: {
+                    name: "Sanguine",
+                    emoji: "😄",
+                    color: "#ff6b6b",
+                    traits: ["Extroverted", "Optimistic", "Sociable", "Spontaneous"]
+                },
+                choleric: {
+                    name: "Choleric", 
+                    emoji: "💪",
+                    color: "#4ecdc4",
+                    traits: ["Leader", "Determined", "Ambitious", "Direct"]
+                },
+                melancholy: {
+                    name: "Melancholic",
+                    emoji: "🤔", 
+                    color: "#45b7d1",
+                    traits: ["Analytical", "Perfectionist", "Thoughtful", "Creative"]
+                },
+                phlegmatic: {
+                    name: "Phlegmatic",
+                    emoji: "😌",
+                    color: "#96ceb4", 
+                    traits: ["Calm", "Loyal", "Patient", "Diplomatic"]
+                }
+            }
+        };
+
+        // Fonction pour changer de langue
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Mettre à jour les boutons de langue
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
+            // Appliquer les traductions
+            applyTranslations();
+            
+            // Mettre à jour la langue du menu
+            updateMenuLanguageFromPage();
+            
+            // Recharger les questions si nécessaire
+            questions = [];
+            if (!document.querySelector('.quiz').classList.contains('hidden')) {
+                loadQuestions();
+            }
+        }
+
+        // Fonction pour appliquer les traductions
+        function applyTranslations() {
+            const t = translations[currentLanguage];
+            
+            document.getElementById('main-title').textContent = t.mainTitle;
+            document.getElementById('welcome-text').textContent = t.welcomeText;
+            document.getElementById('instruction-text').textContent = t.instructionText;
+            document.getElementById('start-btn').textContent = t.startBtn;
+            
+            if (document.getElementById('restart-btn')) {
+                document.getElementById('restart-btn').textContent = t.restartBtn;
+            }
+            
+            if (document.getElementById('ai-analysis-title')) {
+                document.getElementById('ai-analysis-title').textContent = t.aiAnalysisTitle;
+            }
+            
+            // Mettre à jour le statut IA
+            updateAIStatus();
+        }
+
+        // Initialisation de l'application
+        function updateAIStatus() {
+            const statusElement = document.getElementById('ai-status');
+            const t = translations[currentLanguage];
+            
+            if (typeof CONFIG !== 'undefined' && CONFIG.isConfigured() && CONFIG.ANALYSIS_SETTINGS.enabled) {
+                statusElement.innerHTML = t.aiEnabled;
+                statusElement.style.color = '#28a745';
+            } else if (typeof CONFIG !== 'undefined' && !CONFIG.ANALYSIS_SETTINGS.enabled) {
+                statusElement.innerHTML = t.aiDisabled;
+                statusElement.style.color = '#ffc107';
+            } else {
+                statusElement.innerHTML = t.aiNotFound;
+                statusElement.style.color = '#dc3545';
+            }
+        }
+
+        function initializeApp() {
+            applyTranslations();
+        }
+
+        // Initialiser l'app au chargement de la page
+        window.addEventListener('load', initializeApp);
+
+        async function startQuiz() {
+            // Masquer le sélecteur de langue une fois le test commencé
+            document.querySelector('.language-selector').style.display = 'none';
+            
+            document.querySelector('.intro').classList.add('hidden');
+            document.querySelector('.quiz').classList.remove('hidden');
+            
+            await loadQuestions();
+            
+            // Vérifier que les questions ont bien été chargées
+            if (!questions || questions.length === 0) {
+                document.querySelector('.quiz').classList.add('hidden');
+                document.querySelector('.intro').classList.remove('hidden');
+                return;
+            }
+            
+            shuffleArray(questions);
+            current = 0;
+            scores = {
+                sanguine: 0,
+                choleric: 0,
+                melancholy: 0,
+                phlegmatic: 0
+            };
+            userResponses = []; // Réinitialiser les réponses
+            showQuestion();
+        }
+
+        async function loadQuestions() {
+            if (questions.length > 0) return; // déjà chargées
+            try {
+                const response = await fetch('questions.json');
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                }
+                questions = await response.json();
+                console.log('Questions chargées:', questions.length);
+            } catch (error) {
+                console.error('Erreur lors du chargement des questions:', error);
+                alert('Erreur lors du chargement des questions. Veuillez vérifier que le fichier questions.json est accessible.');
+                questions = []; // Réinitialiser en cas d'erreur
+            }
+        }
+
+        function showQuestion() {
+            if (!questions || questions.length === 0) {
+                const t = translations[currentLanguage];
+                alert(t.noQuestionsLoaded || 'Aucune question n\'a été chargée. Veuillez recharger la page.');
+                return;
+            }
+            
+            const q = questions[current];
+            // Utiliser le texte dans la langue actuelle
+            const questionText = q.text[currentLanguage] || q.text.fr || q.text;
+            document.getElementById('question-text').innerText = questionText;
+            
+            // Afficher la description de la question
+            const descriptionText = q.description[currentLanguage] || q.description.fr || '';
+            const descriptionElement = document.getElementById('question-description');
+            if (descriptionText) {
+                descriptionElement.innerText = descriptionText;
+                descriptionElement.style.display = 'block';
+            } else {
+                descriptionElement.style.display = 'none';
+            }
+            
+            // Utiliser les images JPG disponibles ou masquer l'image si pas d'image spécifique
+            const imageElement = document.getElementById('question-image');
+            if (q.image && q.image !== '') {
+                imageElement.src = q.image; // Utiliser le nom d'image tel quel
+                imageElement.style.display = 'block';
+            } else {
+                imageElement.style.display = 'none';
+            }
+            
+            const buttonsDiv = document.getElementById('scale-buttons');
+            buttonsDiv.innerHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.onclick = () => selectAnswer(i);
+                buttonsDiv.appendChild(btn);
+            }
+            
+            const t = translations[currentLanguage];
+            document.getElementById('progress').innerText = `${t.question || 'Question'} ${current+1} / ${questions.length}`;
+        }
+
+        function selectAnswer(score) {
+            // Stocker la réponse pour l'analyse IA
+            const questionText = questions[current].text[currentLanguage] || questions[current].text.fr || questions[current].text;
+            userResponses.push({
+                question: questionText,
+                answer: score,
+                types: questions[current].types
+            });
+            
+            const types = questions[current].types;
+            for (let type in types) {
+                scores[type] += score * types[type];
+            }
+            current++;
+            if (current < questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        async function showResult() {
+            document.querySelector('.quiz').classList.add('hidden');
+            document.querySelector('.result').classList.remove('hidden');
+            
+            const maxScore = Math.max(...Object.values(scores));
+            const bestTypes = Object.entries(scores)
+                .filter(([_, v]) => v === maxScore)
+                .map(([k]) => k);
+
+            let dominantType = bestTypes[0];
+            
+            // Afficher le titre du tempérament
+            const titleElement = document.getElementById('temperament-title');
+            const typeInfo = temperamentDescriptions[currentLanguage][dominantType];
+            const t = translations[currentLanguage];
+            titleElement.innerHTML = `${typeInfo.emoji} ${t.dominantTemperament} <span style="color: ${typeInfo.color}">${typeInfo.name.toUpperCase()}</span>`;
+            
+            // Afficher les scores dans une grille
+            const scoresGrid = document.getElementById('scores-grid');
+            scoresGrid.innerHTML = '';
+            
+            Object.entries(scores).forEach(([type, score]) => {
+                const info = temperamentDescriptions[currentLanguage][type];
+                const percentage = Math.round((score / Math.max(...Object.values(scores))) * 100);
+                
+                const scoreItem = document.createElement('div');
+                scoreItem.className = 'score-item';
+                scoreItem.style.borderLeftColor = info.color;
+                scoreItem.innerHTML = `
+                    <div style="font-weight: bold; color: ${info.color};">${info.emoji} ${info.name}</div>
+                    <div style="font-size: 1.2rem; margin: 5px 0;">${score.toFixed(2)} pts</div>
+                    <div style="font-size: 0.8rem; color: #666;">${percentage}%</div>
+                `;
+                scoresGrid.appendChild(scoreItem);
+            });
+            
+            // Lancer l'analyse IA si configurée
+            if (typeof CONFIG !== 'undefined' && CONFIG.isConfigured() && CONFIG.ANALYSIS_SETTINGS.enabled) {
+                await generateAIAnalysis(CONFIG.GROQ_API_KEY, dominantType, scores, userResponses);
+            }
+        }
+
+        async function generateAIAnalysis(apiKey, dominantType, scores, responses) {
+            const analysisSection = document.getElementById('ai-analysis');
+            const loader = document.getElementById('analysis-loader');
+            const content = document.getElementById('ai-analysis-content');
+            const t = translations[currentLanguage];
+            
+            // Afficher la section et le loader
+            analysisSection.style.display = 'block';
+            loader.style.display = 'inline-block';
+            content.innerHTML = t.generatingAnalysis || 'Génération de votre analyse personnalisée...';
+            
+            try {
+                // Préparer les données pour l'IA
+                const analysisData = {
+                    dominantType: dominantType,
+                    scores: scores,
+                    totalQuestions: responses.length,
+                    strongResponses: responses.filter(r => r.answer >= 4),
+                    weakResponses: responses.filter(r => r.answer <= 2),
+                    temperamentInfo: temperamentDescriptions[currentLanguage][dominantType]
+                };
+                
+                // Créer le prompt dans la langue appropriée
+                let prompt;
+                if (currentLanguage === 'en') {
+                    prompt = `You are a psychologist expert in temperaments. Analyze this personality profile and provide a detailed and personalized explanation.
+
+ANALYZED PROFILE:
+- Dominant temperament: ${temperamentDescriptions[currentLanguage][dominantType].name}
+- Scores: Sanguine(${scores.sanguine}), Choleric(${scores.choleric}), Melancholic(${scores.melancholy}), Phlegmatic(${scores.phlegmatic})
+- Strong responses (4-5): ${analysisData.strongResponses.length} questions
+- Weak responses (1-2): ${analysisData.weakResponses.length} questions
+
+INSTRUCTIONS:
+1. Explain why this temperament matches this person
+2. Describe their main strengths and potential challenges
+3. Give practical advice for their personal development
+4. Mention how they can better interact with other temperaments
+5. Be kind, constructive and precise (300-400 words)
+
+Respond in English, in a warm and professional manner.`;
+                } else {
+                    prompt = `Tu es un psychologue expert en tempéraments. Analyse ce profil de personnalité et fournis une explication détaillée et personnalisée.
+
+PROFIL ANALYSÉ:
+- Tempérament dominant: ${temperamentDescriptions[currentLanguage][dominantType].name}
+- Scores: Sanguin(${scores.sanguine}), Colérique(${scores.choleric}), Mélancolique(${scores.melancholy}), Flegmatique(${scores.phlegmatic})
+- Réponses fortes (4-5): ${analysisData.strongResponses.length} questions
+- Réponses faibles (1-2): ${analysisData.weakResponses.length} questions
+
+CONSIGNES:
+1. Explique pourquoi ce tempérament correspond à cette personne
+2. Décris ses forces principales et ses défis potentiels
+3. Donne des conseils pratiques pour son développement personnel
+4. Mentionne comment il peut mieux interagir avec les autres tempéraments
+5. Sois bienveillant, constructif et précis (300-400 mots)
+
+Réponds en français, de manière chaleureuse et professionnelle.`;
+                }
+
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: CONFIG.AI_MODEL || 'llama-3.1-8b-instant',
+                        messages: [
+                            {
+                                role: 'user',
+                                content: prompt
+                            }
+                        ],
+                        temperature: CONFIG.ANALYSIS_SETTINGS.temperature || 0.7,
+                        max_tokens: CONFIG.ANALYSIS_SETTINGS.max_tokens || 1000
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Détails de l\'erreur API:', errorText);
+                    throw new Error(`Erreur API: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                const analysis = data.choices[0].message.content;
+                
+                // Afficher l'analyse
+                content.innerHTML = analysis.replace(/\n/g, '<br>');
+                
+            } catch (error) {
+                console.error('Erreur lors de l\'analyse IA:', error);
+                const errorMsg = currentLanguage === 'en' 
+                    ? `<p>❌ Unable to generate AI analysis.</p>
+                       <p><strong>Error:</strong> ${error.message}</p>
+                       <p>Check your Groq API key or try again later.</p>`
+                    : `<p>❌ Impossible de générer l'analyse IA.</p>
+                       <p><strong>Erreur:</strong> ${error.message}</p>
+                       <p>Vérifiez votre clé API Groq ou réessayez plus tard.</p>`;
+                content.innerHTML = errorMsg;
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        // Fonction pour redémarrer le test
+        function restartTest() {
+            // Réafficher le sélecteur de langue
+            document.querySelector('.language-selector').style.display = 'block';
+            
+            // Réinitialiser l'état du test
+            document.querySelector('.result').classList.add('hidden');
+            document.querySelector('.quiz').classList.add('hidden');
+            document.querySelector('.intro').classList.remove('hidden');
+            
+            // Réinitialiser les variables
+            current = 0;
+            scores = {
+                sanguine: 0,
+                choleric: 0,
+                melancholy: 0,
+                phlegmatic: 0
+            };
+            userResponses = [];
+            questions = [];
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Fonction pour mettre à jour la langue du menu
+        function updateMenuLanguageFromPage() {
+            // Appeler la fonction du menu si elle existe
+            if (typeof window.updateMenuLanguage === 'function') {
+                window.updateMenuLanguage(currentLanguage);
+            }
+        }
+
+        // Charger le menu de navigation
+        async function loadMenu() {
+            try {
+                const response = await fetch('menu.html');
+                const menuHTML = await response.text();
+                document.getElementById('menu-placeholder').innerHTML = menuHTML;
+                
+                // Initialiser le menu après chargement (classe active + langue)
+                setTimeout(() => {
+                    if (typeof window.initMenuAfterLoad === 'function') {
+                        window.initMenuAfterLoad();
+                    }
+                    updateMenuLanguageFromPage();
+                }, 200);
+            } catch (error) {
+                console.error('Erreur lors du chargement du menu:', error);
+            }
+        }
+
+        // Charger le menu au démarrage
+        document.addEventListener('DOMContentLoaded', loadMenu);
+    </script>
+</body>
+
+</html>
