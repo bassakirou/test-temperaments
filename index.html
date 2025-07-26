@@ -11,7 +11,7 @@
 <body>
     <!-- Inclusion du menu de navigation -->
     <div id="menu-placeholder"></div>
-    
+
     <audio autoplay loop>
         <source src="background-music.mp3" type="audio/mpeg">
         Votre navigateur ne supporte pas la lecture audio.
@@ -19,7 +19,7 @@
 
     <header>
         <h1 id="main-title">Test de Personnalité : Les 4 Tempéraments</h1>
-        
+
         <!-- Sélecteur de langue -->
         <div class="language-selector">
             <button class="lang-btn active" onclick="setLanguage('fr')" id="lang-fr">
@@ -32,10 +32,13 @@
     </header>
 
     <section class="intro">
-        <p id="welcome-text">Bienvenue ! Ce test ludique te permettra de découvrir ton tempérament dominant parmi les 4 types : Sanguin,
-            Colérique, Mélancolique, Flegmatique.</p>
+        <p id="welcome-text">Bienvenue ! Ce test ludique te permettra de découvrir ton tempérament dominant parmi les 4
+            types : <strong>Sanguin</strong>,
+            <strong>Colérique</strong>, <strong>Mélancolique</strong>, <strong>Flegmatique</strong>.</p>
         <p id="instruction-text">Pour chaque question, réponds de 1 (Pas du tout) à 5 (Tout à fait).</p>
-        <p id="ai-status" style="font-size: 0.9rem; color: #666; margin: 10px 0;"></p>
+        <p id="ai-status"
+            style="font-size: 0.9rem; color: rgb(76, 175, 80); margin: 10px 0px;width: fit-content;padding: 12px 18px;background: rgba(76, 175, 80, 0.13);border-radius: 10px;text-align: center;">
+        </p>
         <button class="start-btn" onclick="startQuiz()" id="start-btn">Commencer le test</button>
     </section>
 
@@ -43,7 +46,8 @@
         <div class="question-card">
             <img class="illustration" src="" alt="Illustration question" id="question-image" />
             <h2 id="question-text">Question</h2>
-            <p id="question-description" style="font-style: italic; color: #666; margin: 10px 0; font-size: 0.9rem; display: none;"></p>
+            <p id="question-description"
+                style="font-style: italic; color: #666; margin: 10px 0; font-size: 0.9rem; display: none;"></p>
             <div class="scale-buttons" id="scale-buttons"></div>
         </div>
         <div style="margin-top:10px;">
@@ -55,7 +59,7 @@
         <div class="result-container">
             <h2 id="temperament-title" class="temperament-title">Résultat</h2>
             <div id="scores-grid" class="scores-grid"></div>
-            
+
             <div id="ai-analysis" class="ai-analysis" style="display: none;">
                 <h3>
                     🧠 <span id="ai-analysis-title">Analyse Personnalisée par IA</span>
@@ -63,7 +67,7 @@
                 </h3>
                 <div id="ai-analysis-content" class="ai-analysis-content"></div>
             </div>
-            
+
             <button class="start-btn" onclick="restartTest()" id="restart-btn">Refaire le test</button>
         </div>
     </section>
