@@ -111,7 +111,7 @@ initializeConfig();
 CONFIG.isConfigured = function () {
   const isValid =
     CONFIG.GROQ_API_KEY &&
-    CONFIG.GROQ_API_KEY.startsWith("gsk_") &&
+    CONFIG.GROQ_API_KEY.startsWith("") &&
     CONFIG.GROQ_API_KEY.trim().length > 20;
 
   if (!isValid && CONFIG.ENV.isDevelopment) {

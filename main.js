@@ -19,14 +19,24 @@ let aiConfig = null;
 // Charger la configuration IA
 async function loadAIConfig() {
     try {
-        const response = await fetch('./config.js');
-        const configText = await response.text();
+        // Charger config.js comme un script
+        const script = document.createElement('script');
+        script.src = './config.js';
         
-        // Extraire la configuration depuis le fichier
-        const configMatch = configText.match(/const\s+AI_CONFIG\s*=\s*({[\s\S]*?});/);
-        if (configMatch) {
-            aiConfig = eval('(' + configMatch[1] + ')');
-        }
+        return new Promise((resolve, reject) => {
+            script.onload = () => {
+                // CONFIG est maintenant disponible globalement
+                if (window.CONFIG) {
+                    aiConfig = window.CONFIG;
+                    console.log('Configuration IA chargée:', aiConfig.getDebugInfo());
+                    resolve();
+                } else {
+                    reject(new Error('CONFIG non trouvé'));
+                }
+            };
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
     } catch (error) {
         console.log('Configuration IA non trouvée:', error);
         aiConfig = null;
@@ -212,10 +222,13 @@ function checkAIStatus() {
     const aiStatusElement = document.getElementById('ai-status');
     const t = translations[currentLanguage];
     
-    if (aiConfig && aiConfig.apiKey && aiConfig.apiKey.trim() !== '') {
+    if (aiConfig && aiConfig.isConfigured() && aiConfig.ANALYSIS_SETTINGS.enabled) {
         aiStatusElement.innerHTML = t.aiEnabled;
         aiStatusElement.style.color = '#4CAF50';
-    } else if (aiConfig) {
+    } else if (aiConfig && !aiConfig.isConfigured()) {
+        aiStatusElement.innerHTML = t.aiNotFound;
+        aiStatusElement.style.color = '#F44336';
+    } else if (aiConfig && !aiConfig.ANALYSIS_SETTINGS.enabled) {
         aiStatusElement.innerHTML = t.aiDisabled;
         aiStatusElement.style.color = '#FF9800';
     } else {
@@ -292,7 +305,7 @@ function showResult() {
     displayResults(dominant);
     
     // Générer l'analyse IA si disponible
-    if (aiConfig && aiConfig.apiKey && aiConfig.apiKey.trim() !== '') {
+    if (aiConfig && aiConfig.isConfigured()) {
         generateAIAnalysis(dominant);
     }
 }
@@ -351,11 +364,11 @@ async function generateAIAnalysis(dominant) {
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${aiConfig.apiKey}`,
+                'Authorization': `Bearer ${aiConfig.GROQ_API_KEY}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: aiConfig.model,
+                model: aiConfig.AI_MODEL,
                 messages: [
                     {
                         role: 'system',
@@ -366,8 +379,8 @@ async function generateAIAnalysis(dominant) {
                         content: `Voici les résultats du test de tempérament : ${JSON.stringify(analysisData)}. Fournis une analyse détaillée et des conseils personnalisés.`
                     }
                 ],
-                max_tokens: 1000,
-                temperature: 0.7
+                max_tokens: aiConfig.ANALYSIS_SETTINGS.max_tokens,
+                temperature: aiConfig.ANALYSIS_SETTINGS.temperature
             })
         });
         
