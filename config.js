@@ -34,10 +34,10 @@ const CONFIG = {
 async function loadApiKeyFromVercel() {
   try {
     // Essayer de charger depuis une API route Vercel
-    const response = await fetch('/api/config');
+    const response = await fetch("/api/config");
     if (response.ok) {
       const data = await response.json();
-      if (data.apiKey && data.apiKey !== '') {
+      if (data.apiKey && data.apiKey !== "") {
         console.log("✅ Clé API chargée depuis l'API Vercel");
         return data.apiKey;
       }
@@ -70,11 +70,13 @@ async function initializeConfig() {
     // Méthode 1: Essayer process.env (injecté par Vite) - pour le développement
     if (isDev) {
       try {
-        if (typeof process !== 'undefined' && 
-            process.env && 
-            process.env.VITE_GROQ_API_KEY && 
-            process.env.VITE_GROQ_API_KEY !== '""' &&
-            process.env.VITE_GROQ_API_KEY !== "undefined") {
+        if (
+          typeof process !== "undefined" &&
+          process.env &&
+          process.env.VITE_GROQ_API_KEY &&
+          process.env.VITE_GROQ_API_KEY !== '""' &&
+          process.env.VITE_GROQ_API_KEY !== "undefined"
+        ) {
           apiKey = process.env.VITE_GROQ_API_KEY;
           // Nettoyer les guillemets si présents
           if (apiKey.startsWith('"') && apiKey.endsWith('"')) {
@@ -89,10 +91,12 @@ async function initializeConfig() {
       // Méthode 2: Variables globales (fallback pour le développement)
       if (!apiKey) {
         try {
-          if (typeof window !== "undefined" && 
-              window.__VITE_GROQ_API_KEY__ && 
-              window.__VITE_GROQ_API_KEY__ !== '""' &&
-              window.__VITE_GROQ_API_KEY__ !== "undefined") {
+          if (
+            typeof window !== "undefined" &&
+            window.__VITE_GROQ_API_KEY__ &&
+            window.__VITE_GROQ_API_KEY__ !== '""' &&
+            window.__VITE_GROQ_API_KEY__ !== "undefined"
+          ) {
             apiKey = window.__VITE_GROQ_API_KEY__;
             if (apiKey.startsWith('"') && apiKey.endsWith('"')) {
               apiKey = apiKey.slice(1, -1);
@@ -100,7 +104,10 @@ async function initializeConfig() {
             console.log("✅ Clé trouvée via window.__VITE_GROQ_API_KEY__");
           }
         } catch (e) {
-          console.log("❌ window.__VITE_GROQ_API_KEY__ non accessible:", e.message);
+          console.log(
+            "❌ window.__VITE_GROQ_API_KEY__ non accessible:",
+            e.message
+          );
         }
       }
     }
@@ -119,23 +126,33 @@ async function initializeConfig() {
     if (apiKey) {
       console.log("- Longueur de la clé:", apiKey.length);
       console.log("- Préfixe:", apiKey.substring(0, 4) + "...");
-      console.log("- Format valide:", apiKey.startsWith("") && apiKey.length > 20);
+      console.log(
+        "- Format valide:",
+        apiKey.startsWith("") && apiKey.length > 20
+      );
     } else {
       console.warn("⚠️ AUCUNE CLÉ API TROUVÉE !");
       if (isProd) {
-        console.warn("🔧 En production: Vérifiez que VITE_GROQ_API_KEY est configurée dans Vercel");
-        console.warn("💡 Alternative: Créez une API route /api/config pour servir la clé");
+        console.warn(
+          "🔧 En production: Vérifiez que VITE_GROQ_API_KEY est configurée dans Vercel"
+        );
+        console.warn(
+          "💡 Alternative: Créez une API route /api/config pour servir la clé"
+        );
       } else {
         console.warn("🔧 En développement: Vérifiez votre fichier .env");
       }
     }
 
     // Déclencher la mise à jour du statut IA après le chargement
-    if (typeof updateAIStatus === 'function') {
+    if (typeof updateAIStatus === "function") {
       updateAIStatus();
     }
   } catch (error) {
-    console.error("❌ Erreur lors de l'initialisation de la configuration:", error);
+    console.error(
+      "❌ Erreur lors de l'initialisation de la configuration:",
+      error
+    );
   }
 }
 
@@ -153,7 +170,7 @@ CONFIG.isConfigured = function () {
 };
 
 // Fonction pour recharger la configuration (utile pour les tests)
-CONFIG.reload = function() {
+CONFIG.reload = function () {
   return initializeConfig();
 };
 

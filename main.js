@@ -196,11 +196,19 @@ async function loadMenu() {
 // Charger les questions
 async function loadQuestions() {
     try {
-        const response = await fetch('./questions.json');
+        const response = await fetch('./quiz.json');
         const data = await response.json();
-        questions = data[currentLanguage] || data.fr;
+        // Transformer les données du quiz en format attendu par le code
+        questions = data.map(item => ({
+            text: item.situation[currentLanguage] || item.situation.fr,
+            temperament: Object.keys(item.answers).reduce((a, b) => 
+                item.answers[a] > item.answers[b] ? a : b
+            )
+        }));
+        console.log(`Questions chargées: ${questions.length} questions`);
     } catch (error) {
         console.error('Erreur lors du chargement des questions:', error);
+        questions = [];
     }
 }
 
