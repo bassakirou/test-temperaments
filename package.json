@@ -4,6 +4,7 @@
   "description": "Test de personnalité des 4 tempéraments avec analyse IA",
   "main": "index.html",
   "scripts": {
+    "setup": "node setup-dev.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",

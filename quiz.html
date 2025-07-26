@@ -60,7 +60,7 @@
                         <input type="checkbox" id="sanguine" name="temperament" value="sanguine">
                         <label for="sanguine" class="temperament-label sanguine">
                             <span class="temperament-name" id="sanguine-name">Sanguin</span>
-                            <!-- <span class="temperament-desc" id="sanguine-desc">Extraverti, optimiste, sociable</span> -->
+                            <span class="temperament-desc" id="sanguine-desc">Extraverti, optimiste, sociable</span>
                         </label>
                     </div>
 
@@ -68,7 +68,7 @@
                         <input type="checkbox" id="choleric" name="temperament" value="choleric">
                         <label for="choleric" class="temperament-label choleric">
                             <span class="temperament-name" id="choleric-name">Colérique</span>
-                            <!-- <span class="temperament-desc" id="choleric-desc">Leader, déterminé, ambitieux</span> -->
+                            <span class="temperament-desc" id="choleric-desc">Leader, déterminé, ambitieux</span>
                         </label>
                     </div>
 
@@ -76,7 +76,8 @@
                         <input type="checkbox" id="melancholy" name="temperament" value="melancholy">
                         <label for="melancholy" class="temperament-label melancholy">
                             <span class="temperament-name" id="melancholy-name">Mélancolique</span>
-                            <!-- <span class="temperament-desc" id="melancholy-desc">Perfectionniste, analytique, sensible</span> -->
+                            <span class="temperament-desc" id="melancholy-desc">Perfectionniste, analytique,
+                                sensible</span>
                         </label>
                     </div>
 
@@ -84,7 +85,7 @@
                         <input type="checkbox" id="phlegmatic" name="temperament" value="phlegmatic">
                         <label for="phlegmatic" class="temperament-label phlegmatic">
                             <span class="temperament-name" id="phlegmatic-name">Flegmatique</span>
-                            <!-- <span class="temperament-desc" id="phlegmatic-desc">Calme, patient, diplomate</span> -->
+                            <span class="temperament-desc" id="phlegmatic-desc">Calme, patient, diplomate</span>
                         </label>
                     </div>
                 </div>
@@ -255,7 +256,7 @@
         // Mise à jour des traductions
         function updateTranslations() {
             const t = translations[currentLanguage];
-            
+
             // Fonction helper pour mettre à jour un élément s'il existe
             function updateElement(id, property, value) {
                 const element = document.getElementById(id);
@@ -299,7 +300,7 @@
         function startQuiz() {
             // Masquer le sélecteur de langue une fois le test commencé
             document.querySelector('.language-selector').style.display = 'none';
-            
+
             document.getElementById('instructions').style.display = 'none';
             document.querySelector('.start-container').style.display = 'none';
             document.getElementById('quiz-section').style.display = 'block';
@@ -495,7 +496,7 @@
         function restartQuiz() {
             // Réafficher le sélecteur de langue
             document.querySelector('.language-selector').style.display = 'block';
-            
+
             document.getElementById('results-section').style.display = 'none';
             document.getElementById('review-section').style.display = 'none';
             document.getElementById('instructions').style.display = 'block';
