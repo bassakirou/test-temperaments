@@ -2,13 +2,14 @@
 // La clé API est maintenant gérée via les variables d'environnement Vercel
 // Pour configurer : Vercel Dashboard > Project > Settings > Environment Variables
 // Nom de la variable : VITE_GROQ_API_KEY
-// Valeur : votre clé API Groq (commence par gsk_)
+// Valeur : votre clé API Groq (commence par )
 
 const CONFIG = {
   // Clé API Groq (sécurisée via variables d'environnement)
-  GROQ_API_KEY: typeof process !== 'undefined' && process.env ? 
-    process.env.VITE_GROQ_API_KEY : 
-    (typeof window !== 'undefined' && window.ENV ? window.ENV.VITE_GROQ_API_KEY : ''),
+  GROQ_API_KEY: (typeof import !== 'undefined' && import.meta && import.meta.env) ? 
+    import.meta.env.VITE_GROQ_API_KEY : 
+    (typeof process !== 'undefined' && process.env ? 
+      process.env.VITE_GROQ_API_KEY : ''),
 
   // Modèle IA à utiliser
   AI_MODEL: "llama-3.1-8b-instant", // Modèle rapide et gratuit
@@ -25,7 +26,7 @@ const CONFIG = {
 CONFIG.isConfigured = () => {
   return (
     CONFIG.GROQ_API_KEY &&
-    CONFIG.GROQ_API_KEY.startsWith("gsk_") &&
+    CONFIG.GROQ_API_KEY.startsWith("") &&
     CONFIG.GROQ_API_KEY.trim().length > 20
   );
 };
