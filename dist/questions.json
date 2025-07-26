@@ -1,0 +1,801 @@
+[
+    {
+        "text": {
+            "fr": "Je préfère être entouré de beaucoup de personnes lors d'événements sociaux.",
+            "en": "I prefer to be surrounded by many people at social events."
+        },
+        "description": {
+            "fr": "Cette question évalue votre préférence pour les grands groupes sociaux versus les petits cercles intimes.",
+            "en": "This question assesses your preference for large social groups versus small intimate circles."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.5,
+            "melancholy": -0.5,
+            "phlegmatic": 0
+        },
+        "image": "social.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je prends des décisions rapidement sans trop réfléchir.",
+            "en": "I make decisions quickly without thinking too much."
+        },
+        "description": {
+            "fr": "Mesure votre tendance à l'impulsivité versus la réflexion approfondie dans la prise de décision.",
+            "en": "Measures your tendency toward impulsivity versus deep reflection in decision-making."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.8,
+            "melancholy": -1,
+            "phlegmatic": -0.5
+        },
+        "image": "decision.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime planifier chaque détail avant d'entreprendre quelque chose.",
+            "en": "I like to plan every detail before undertaking something."
+        },
+        "description": {
+            "fr": "Évalue votre besoin de structure et de préparation avant d'agir.",
+            "en": "Evaluates your need for structure and preparation before taking action."
+        },
+        "types": {
+            "sanguine": -0.8,
+            "choleric": 0.3,
+            "melancholy": 1,
+            "phlegmatic": 0.5
+        },
+        "image": "planning.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je reste calme même dans les situations stressantes.",
+            "en": "I remain calm even in stressful situations."
+        },
+        "description": {
+            "fr": "Mesure votre capacité à gérer le stress et maintenir votre équilibre émotionnel.",
+            "en": "Measures your ability to manage stress and maintain emotional balance."
+        },
+        "types": {
+            "sanguine": -0.3,
+            "choleric": -0.5,
+            "melancholy": 0.3,
+            "phlegmatic": 1
+        },
+        "image": "calm.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime être le centre d'attention.",
+            "en": "I like to be the center of attention."
+        },
+        "description": {
+            "fr": "Évalue votre besoin de reconnaissance sociale et votre confort avec la visibilité.",
+            "en": "Evaluates your need for social recognition and comfort with visibility."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.7,
+            "melancholy": -0.8,
+            "phlegmatic": -0.5
+        },
+        "image": "attention.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je préfère travailler seul plutôt qu'en équipe.",
+            "en": "I prefer to work alone rather than in a team."
+        },
+        "description": {
+            "fr": "Mesure votre préférence pour l'autonomie versus la collaboration dans le travail.",
+            "en": "Measures your preference for autonomy versus collaboration in work."
+        },
+        "types": {
+            "sanguine": -0.8,
+            "choleric": 0.2,
+            "melancholy": 0.8,
+            "phlegmatic": 0.3
+        },
+        "image": "alone.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis très expressif avec mes émotions.",
+            "en": "I am very expressive with my emotions."
+        },
+        "description": {
+            "fr": "Évalue votre tendance à exprimer ouvertement vos sentiments et émotions.",
+            "en": "Evaluates your tendency to openly express your feelings and emotions."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.6,
+            "melancholy": 0.4,
+            "phlegmatic": -0.7
+        },
+        "image": "emotions.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime prendre des risques et essayer de nouvelles choses.",
+            "en": "I like to take risks and try new things."
+        },
+        "description": {
+            "fr": "Mesure votre ouverture au changement et votre tolérance au risque.",
+            "en": "Measures your openness to change and risk tolerance."
+        },
+        "types": {
+            "sanguine": 0.9,
+            "choleric": 0.8,
+            "melancholy": -0.6,
+            "phlegmatic": -0.4
+        },
+        "image": "risk.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis perfectionniste dans mon travail.",
+            "en": "I am a perfectionist in my work."
+        },
+        "description": {
+            "fr": "Évalue votre attention aux détails et vos standards de qualité élevés.",
+            "en": "Evaluates your attention to detail and high quality standards."
+        },
+        "types": {
+            "sanguine": -0.5,
+            "choleric": 0.4,
+            "melancholy": 1,
+            "phlegmatic": 0.2
+        },
+        "image": "perfectionist.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je préfère éviter les conflits.",
+            "en": "I prefer to avoid conflicts."
+        },
+        "description": {
+            "fr": "Mesure votre approche face aux désaccords et votre préférence pour l'harmonie.",
+            "en": "Measures your approach to disagreements and preference for harmony."
+        },
+        "types": {
+            "sanguine": 0.2,
+            "choleric": -1,
+            "melancholy": 0.5,
+            "phlegmatic": 1
+        },
+        "image": "conflict.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis souvent optimiste et joyeux.",
+            "en": "I am often optimistic and cheerful."
+        },
+        "description": {
+            "fr": "Évalue votre disposition générale et votre vision positive de la vie.",
+            "en": "Evaluates your general disposition and positive outlook on life."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.3,
+            "melancholy": -0.4,
+            "phlegmatic": 0.6
+        },
+        "image": "optimistic.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime diriger et prendre des responsabilités.",
+            "en": "I like to lead and take responsibilities."
+        },
+        "description": {
+            "fr": "Mesure votre inclination naturelle vers le leadership et la prise d'initiative.",
+            "en": "Measures your natural inclination toward leadership and taking initiative."
+        },
+        "types": {
+            "sanguine": 0.6,
+            "choleric": 1,
+            "melancholy": 0.2,
+            "phlegmatic": -0.3
+        },
+        "image": "leadership.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je réfléchis longuement avant de parler.",
+            "en": "I think for a long time before speaking."
+        },
+        "description": {
+            "fr": "Évalue votre tendance à la réflexion versus la spontanéité dans la communication.",
+            "en": "Evaluates your tendency toward reflection versus spontaneity in communication."
+        },
+        "types": {
+            "sanguine": -0.8,
+            "choleric": -0.4,
+            "melancholy": 0.9,
+            "phlegmatic": 0.7
+        },
+        "image": "thinking.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je m'adapte facilement aux changements.",
+            "en": "I adapt easily to changes."
+        },
+        "description": {
+            "fr": "Mesure votre flexibilité et capacité d'adaptation face aux nouvelles situations.",
+            "en": "Measures your flexibility and adaptability to new situations."
+        },
+        "types": {
+            "sanguine": 0.8,
+            "choleric": 0.6,
+            "melancholy": -0.6,
+            "phlegmatic": 0.4
+        },
+        "image": "adaptation.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis très organisé dans ma vie quotidienne.",
+            "en": "I am very organized in my daily life."
+        },
+        "description": {
+            "fr": "Évalue votre besoin de structure et d'ordre dans votre environnement personnel.",
+            "en": "Evaluates your need for structure and order in your personal environment."
+        },
+        "types": {
+            "sanguine": -0.4,
+            "choleric": 0.7,
+            "melancholy": 1,
+            "phlegmatic": 0.5
+        },
+        "image": "organized.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je préfère la routine à l'imprévu.",
+            "en": "I prefer routine to the unexpected."
+        },
+        "description": {
+            "fr": "Mesure votre confort avec la prévisibilité versus l'excitation de la nouveauté.",
+            "en": "Measures your comfort with predictability versus the excitement of novelty."
+        },
+        "types": {
+            "sanguine": -0.7,
+            "choleric": -0.3,
+            "melancholy": 0.8,
+            "phlegmatic": 0.9
+        },
+        "image": "routine.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis compétitif et j'aime gagner.",
+            "en": "I am competitive and I like to win."
+        },
+        "description": {
+            "fr": "Évalue votre esprit de compétition et votre motivation par la réussite.",
+            "en": "Evaluates your competitive spirit and motivation by success."
+        },
+        "types": {
+            "sanguine": 0.7,
+            "choleric": 1,
+            "melancholy": 0.3,
+            "phlegmatic": -0.5
+        },
+        "image": "competitive.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis sensible aux critiques.",
+            "en": "I am sensitive to criticism."
+        },
+        "description": {
+            "fr": "Mesure votre réaction émotionnelle face aux commentaires négatifs ou constructifs.",
+            "en": "Measures your emotional reaction to negative or constructive feedback."
+        },
+        "types": {
+            "sanguine": 0.6,
+            "choleric": -0.3,
+            "melancholy": 0.9,
+            "phlegmatic": 0.4
+        },
+        "image": "sensitive.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime aider les autres et être utile.",
+            "en": "I like to help others and be useful."
+        },
+        "description": {
+            "fr": "Évalue votre orientation vers le service et votre empathie naturelle.",
+            "en": "Evaluates your service orientation and natural empathy."
+        },
+        "types": {
+            "sanguine": 0.7,
+            "choleric": 0.4,
+            "melancholy": 0.6,
+            "phlegmatic": 1
+        },
+        "image": "helping.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je parle beaucoup et facilement.",
+            "en": "I talk a lot and easily."
+        },
+        "description": {
+            "fr": "Mesure votre aisance sociale et votre tendance à la communication verbale.",
+            "en": "Measures your social ease and tendency toward verbal communication."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.6,
+            "melancholy": -0.6,
+            "phlegmatic": -0.3
+        },
+        "image": "talking.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis impatient quand les choses n'avancent pas assez vite.",
+            "en": "I am impatient when things don't move fast enough."
+        },
+        "description": {
+            "fr": "Évalue votre tolérance aux délais et votre besoin de résultats rapides.",
+            "en": "Evaluates your tolerance for delays and need for quick results."
+        },
+        "types": {
+            "sanguine": 0.7,
+            "choleric": 1,
+            "melancholy": 0.2,
+            "phlegmatic": -0.8
+        },
+        "image": "impatient.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je préfère analyser tous les aspects d'un problème avant d'agir.",
+            "en": "I prefer to analyze all aspects of a problem before acting."
+        },
+        "description": {
+            "fr": "Mesure votre approche méthodique versus intuitive dans la résolution de problèmes.",
+            "en": "Measures your methodical versus intuitive approach to problem-solving."
+        },
+        "types": {
+            "sanguine": -0.8,
+            "choleric": -0.2,
+            "melancholy": 1,
+            "phlegmatic": 0.6
+        },
+        "image": "analysis.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis loyal envers mes amis et ma famille.",
+            "en": "I am loyal to my friends and family."
+        },
+        "description": {
+            "fr": "Évalue l'importance que vous accordez aux relations durables et à la fidélité.",
+            "en": "Evaluates the importance you place on lasting relationships and loyalty."
+        },
+        "types": {
+            "sanguine": 0.5,
+            "choleric": 0.6,
+            "melancholy": 0.8,
+            "phlegmatic": 1
+        },
+        "image": "loyalty.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime être spontané et impulsif.",
+            "en": "I like to be spontaneous and impulsive."
+        },
+        "description": {
+            "fr": "Mesure votre préférence pour l'action immédiate versus la planification.",
+            "en": "Measures your preference for immediate action versus planning."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.7,
+            "melancholy": -0.9,
+            "phlegmatic": -0.6
+        },
+        "image": "spontaneous.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis déterminé à atteindre mes objectifs.",
+            "en": "I am determined to achieve my goals."
+        },
+        "description": {
+            "fr": "Évalue votre persévérance et votre focus sur les résultats à long terme.",
+            "en": "Evaluates your perseverance and focus on long-term results."
+        },
+        "types": {
+            "sanguine": 0.5,
+            "choleric": 1,
+            "melancholy": 0.7,
+            "phlegmatic": 0.4
+        },
+        "image": "determined.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je préfère écouter plutôt que parler.",
+            "en": "I prefer to listen rather than talk."
+        },
+        "description": {
+            "fr": "Mesure votre style de communication : réceptif versus expressif.",
+            "en": "Measures your communication style: receptive versus expressive."
+        },
+        "types": {
+            "sanguine": -0.8,
+            "choleric": -0.4,
+            "melancholy": 0.7,
+            "phlegmatic": 1
+        },
+        "image": "listening.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis créatif et j'aime les activités artistiques.",
+            "en": "I am creative and I like artistic activities."
+        },
+        "description": {
+            "fr": "Évalue votre sensibilité artistique et votre besoin d'expression créative.",
+            "en": "Evaluates your artistic sensitivity and need for creative expression."
+        },
+        "types": {
+            "sanguine": 0.6,
+            "choleric": 0.2,
+            "melancholy": 1,
+            "phlegmatic": 0.4
+        },
+        "image": "creative.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je m'ennuie facilement avec les tâches répétitives.",
+            "en": "I get bored easily with repetitive tasks."
+        },
+        "description": {
+            "fr": "Mesure votre besoin de variété et de stimulation dans vos activités.",
+            "en": "Measures your need for variety and stimulation in your activities."
+        },
+        "types": {
+            "sanguine": 0.9,
+            "choleric": 0.7,
+            "melancholy": 0.3,
+            "phlegmatic": -0.6
+        },
+        "image": "bored.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis diplomate dans mes relations avec les autres.",
+            "en": "I am diplomatic in my relationships with others."
+        },
+        "description": {
+            "fr": "Évalue votre capacité à naviguer les relations interpersonnelles avec tact.",
+            "en": "Evaluates your ability to navigate interpersonal relationships with tact."
+        },
+        "types": {
+            "sanguine": 0.4,
+            "choleric": -0.2,
+            "melancholy": 0.6,
+            "phlegmatic": 1
+        },
+        "image": "diplomatic.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime les défis et les situations difficiles.",
+            "en": "I like challenges and difficult situations."
+        },
+        "description": {
+            "fr": "Mesure votre attirance pour la complexité et les obstacles à surmonter.",
+            "en": "Measures your attraction to complexity and obstacles to overcome."
+        },
+        "types": {
+            "sanguine": 0.6,
+            "choleric": 1,
+            "melancholy": 0.4,
+            "phlegmatic": -0.3
+        },
+        "image": "challenge.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis méticuleux dans les détails.",
+            "en": "I am meticulous with details."
+        },
+        "description": {
+            "fr": "Évalue votre attention aux petits éléments et votre souci de précision.",
+            "en": "Evaluates your attention to small elements and concern for precision."
+        },
+        "types": {
+            "sanguine": -0.6,
+            "choleric": 0.3,
+            "melancholy": 1,
+            "phlegmatic": 0.5
+        },
+        "image": "meticulous.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je préfère maintenir la paix plutôt que d'avoir raison.",
+            "en": "I prefer to maintain peace rather than be right."
+        },
+        "description": {
+            "fr": "Mesure votre priorité entre l'harmonie relationnelle et l'affirmation de vos idées.",
+            "en": "Measures your priority between relational harmony and asserting your ideas."
+        },
+        "types": {
+            "sanguine": 0.3,
+            "choleric": -0.9,
+            "melancholy": 0.2,
+            "phlegmatic": 1
+        },
+        "image": "peace.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis énergique et plein de vie.",
+            "en": "I am energetic and full of life."
+        },
+        "description": {
+            "fr": "Évalue votre niveau d'énergie naturel et votre vitalité générale.",
+            "en": "Evaluates your natural energy level and general vitality."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.8,
+            "melancholy": -0.2,
+            "phlegmatic": 0.2
+        },
+        "image": "energetic.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime avoir le contrôle sur les situations.",
+            "en": "I like to have control over situations."
+        },
+        "description": {
+            "fr": "Mesure votre besoin de maîtrise et votre confort avec l'autorité.",
+            "en": "Measures your need for control and comfort with authority."
+        },
+        "types": {
+            "sanguine": 0.4,
+            "choleric": 1,
+            "melancholy": 0.6,
+            "phlegmatic": -0.2
+        },
+        "image": "control.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis introspectif et j'aime réfléchir sur moi-même.",
+            "en": "I am introspective and I like to reflect on myself."
+        },
+        "description": {
+            "fr": "Évalue votre tendance à l'auto-analyse et à la réflexion personnelle.",
+            "en": "Evaluates your tendency toward self-analysis and personal reflection."
+        },
+        "types": {
+            "sanguine": -0.4,
+            "choleric": 0.1,
+            "melancholy": 1,
+            "phlegmatic": 0.6
+        },
+        "image": "introspective.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis patient avec les autres.",
+            "en": "I am patient with others."
+        },
+        "description": {
+            "fr": "Mesure votre tolérance et votre capacité à attendre sans frustration.",
+            "en": "Measures your tolerance and ability to wait without frustration."
+        },
+        "types": {
+            "sanguine": 0.2,
+            "choleric": -0.6,
+            "melancholy": 0.7,
+            "phlegmatic": 1
+        },
+        "image": "patient.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime faire rire les autres.",
+            "en": "I like to make others laugh."
+        },
+        "description": {
+            "fr": "Évalue votre désir de créer de la joie et votre sens de l'humour social.",
+            "en": "Evaluates your desire to create joy and your social sense of humor."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.5,
+            "melancholy": 0.2,
+            "phlegmatic": 0.6
+        },
+        "image": "humor.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis direct dans ma communication.",
+            "en": "I am direct in my communication."
+        },
+        "description": {
+            "fr": "Mesure votre style de communication : franc versus diplomatique.",
+            "en": "Measures your communication style: frank versus diplomatic."
+        },
+        "types": {
+            "sanguine": 0.6,
+            "choleric": 1,
+            "melancholy": 0.4,
+            "phlegmatic": -0.3
+        },
+        "image": "direct.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je préfère la qualité à la quantité.",
+            "en": "I prefer quality over quantity."
+        },
+        "description": {
+            "fr": "Évalue votre approche : excellence versus efficacité dans vos choix.",
+            "en": "Evaluates your approach: excellence versus efficiency in your choices."
+        },
+        "types": {
+            "sanguine": 0.2,
+            "choleric": 0.5,
+            "melancholy": 1,
+            "phlegmatic": 0.7
+        },
+        "image": "quality.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis stable et fiable.",
+            "en": "I am stable and reliable."
+        },
+        "description": {
+            "fr": "Mesure votre constance et la confiance que les autres peuvent vous accorder.",
+            "en": "Measures your consistency and the trust others can place in you."
+        },
+        "types": {
+            "sanguine": 0.3,
+            "choleric": 0.6,
+            "melancholy": 0.8,
+            "phlegmatic": 1
+        },
+        "image": "reliable.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime être au centre de l'action.",
+            "en": "I like to be at the center of action."
+        },
+        "description": {
+            "fr": "Évalue votre besoin d'être impliqué dans les événements importants.",
+            "en": "Evaluates your need to be involved in important events."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.9,
+            "melancholy": -0.4,
+            "phlegmatic": -0.2
+        },
+        "image": "action.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis ambitieux et j'ai de grands projets.",
+            "en": "I am ambitious and have big projects."
+        },
+        "description": {
+            "fr": "Mesure votre vision à long terme et votre motivation pour les grands objectifs.",
+            "en": "Measures your long-term vision and motivation for big goals."
+        },
+        "types": {
+            "sanguine": 0.7,
+            "choleric": 1,
+            "melancholy": 0.5,
+            "phlegmatic": 0.2
+        },
+        "image": "ambitious.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis sensible à l'atmosphère et aux émotions des autres.",
+            "en": "I am sensitive to the atmosphere and emotions of others."
+        },
+        "description": {
+            "fr": "Évalue votre empathie et votre capacité à percevoir les sentiments d'autrui.",
+            "en": "Evaluates your empathy and ability to perceive others' feelings."
+        },
+        "types": {
+            "sanguine": 0.6,
+            "choleric": 0.2,
+            "melancholy": 1,
+            "phlegmatic": 0.8
+        },
+        "image": "sensitive_atmosphere.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je préfère la stabilité au changement.",
+            "en": "I prefer stability to change."
+        },
+        "description": {
+            "fr": "Mesure votre confort avec la continuité versus votre ouverture à la nouveauté.",
+            "en": "Measures your comfort with continuity versus openness to novelty."
+        },
+        "types": {
+            "sanguine": -0.7,
+            "choleric": -0.4,
+            "melancholy": 0.6,
+            "phlegmatic": 1
+        },
+        "image": "stability.jpg"
+    },
+    {
+        "text": {
+            "fr": "J'aime divertir et amuser les gens.",
+            "en": "I like to entertain and amuse people."
+        },
+        "description": {
+            "fr": "Évalue votre plaisir à créer de la joie et à être une source de divertissement.",
+            "en": "Evaluates your pleasure in creating joy and being a source of entertainment."
+        },
+        "types": {
+            "sanguine": 1,
+            "choleric": 0.4,
+            "melancholy": 0.3,
+            "phlegmatic": 0.5
+        },
+        "image": "entertain.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je suis persévérant face aux obstacles.",
+            "en": "I am persevering in the face of obstacles."
+        },
+        "description": {
+            "fr": "Mesure votre ténacité et votre capacité à maintenir l'effort malgré les difficultés.",
+            "en": "Measures your tenacity and ability to maintain effort despite difficulties."
+        },
+        "types": {
+            "sanguine": 0.4,
+            "choleric": 1,
+            "melancholy": 0.8,
+            "phlegmatic": 0.6
+        },
+        "image": "persevering.jpg"
+    },
+    {
+        "text": {
+            "fr": "Je préfère réfléchir avant d'agir.",
+            "en": "I prefer to think before acting."
+        },
+        "description": {
+            "fr": "Évalue votre approche prudente versus impulsive dans la prise d'action.",
+            "en": "Evaluates your cautious versus impulsive approach to taking action."
+        },
+        "types": {
+            "sanguine": -0.8,
+            "choleric": -0.3,
+            "melancholy": 1,
+            "phlegmatic": 0.8
+        },
+        "image": "think_before_act.jpg"
+    }
+]
